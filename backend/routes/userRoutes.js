@@ -1,11 +1,16 @@
+const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const express = require("express");
 const User = require("../models/User");
+const { protect, isAdmin } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Create new user
+/**
+ * @route   POST /api/users/create
+ * @desc    Create new user (student / admin / warden)
+ * @access  Public
+ */
 router.post("/create", async (req, res) => {
   try {
     const user = await User.create(req.body);
@@ -25,7 +30,11 @@ router.post("/create", async (req, res) => {
   }
 });
 
-// Login user  ✅ (PASTE HERE)
+/**
+ * @route   POST /api/users/login
+ * @desc    Login user & return JWT
+ * @access  Public
+ */
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -61,4 +70,18 @@ router.post("/login", async (req, res) => {
   }
 });
 
-module.exports = router;   // ⬅️ MUST BE LAST
+/**
+ * @route   GET /api/users/all
+ * @desc    Get all users (ADMIN ONLY)
+ * @access  Private (Admin)
+ */
+router.get("/all", protect, isAdmin, async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;

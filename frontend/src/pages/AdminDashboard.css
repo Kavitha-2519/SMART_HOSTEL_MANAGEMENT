@@ -1,0 +1,23 @@
+.admin-layout {
+  display: flex;
+}
+
+.admin-content {
+  margin-left: 240px;
+  padding: 30px;
+  color: white;
+}
+
+.admin-cards {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.card {
+  background: #222;
+  padding: 30px;
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+}
